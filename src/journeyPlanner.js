@@ -1,7 +1,9 @@
+// load packages
 const Lodash = require("lodash");
 const Uuid = require("uuid-by-string");
 const Moment = require("moment");
 
+// load data
 const routesData = require("../data/routes.json");
 const flightsData = require("../data/flights.json");
 
@@ -12,8 +14,9 @@ exports.lookupFlights = (route, departureTime) => {
   });
 
   if (foundFlights) {
+    // loop through flights
     foundFlights.forEach(function(flight) {
-      // change departure time to unix timestamp
+      // add departure time to unix timestamp format
       let regex = /\d+/g;
       let flightDepartureTime = flight.departure.match(regex);
       flightDepartureTime = Moment()
@@ -22,6 +25,7 @@ exports.lookupFlights = (route, departureTime) => {
       flight.departureUnix = flightDepartureTime;
     });
 
+    // check if departure time is after inputted departure time
     if (departureTime) {
       foundFlights = Lodash.filter(foundFlights, function(flight) {
         return flight.departureUnix >= departureTime;
@@ -40,13 +44,13 @@ exports.findRoutesForDestination = (
 ) => {
   let foundRoute = [];
 
-  // first flight
+  // look up first flights (from origin route)
   originRoute["flights"] = exports.lookupFlights(originRoute, departureTime);
   if (originRoute.flights.length > 0) {
     foundRoute.push(originRoute);
   }
 
-  // if connection flights (if not destination)
+  // if connection route (if not destination)
   if (originRoute.to != destination) {
     let foundRoutes = Lodash.filter(routesData, function(route) {
       return route.from == originRoute.to && route.to != originRoute.from;
@@ -58,6 +62,7 @@ exports.findRoutesForDestination = (
       });
 
       if (foundDestination) {
+        // if destination found for connection route then look up flights
         foundDestination["flights"] = exports.lookupFlights(
           foundDestination,
           departureTime
@@ -66,9 +71,11 @@ exports.findRoutesForDestination = (
           foundRoute.push(foundDestination);
         }
       } else {
+        // reset routes
         foundRoute = [];
       }
     } else {
+      // reset routes
       foundRoute = [];
     }
   }
@@ -80,7 +87,7 @@ exports.findRoutesForDestination = (
 exports.findJourneys = (origin, destination, orderBy, departureTime = null) => {
   let journeys = [];
 
-  // if departureTime then convert to unix
+  // if inputted departureTime then convert it to unix
   if (departureTime) {
     departureTime = Moment(departureTime, "DD/MM/YYYY HH:mm").unix();
   }
