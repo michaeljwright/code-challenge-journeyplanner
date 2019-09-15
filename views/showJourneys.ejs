@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title><%= pageTitle %></title>
+</head>
+<body>
+
+<h4><%= pageTitle %></h4>
+
+<p>
+    <%  if (orderBy == 'durationTotal') { %>
+        Q3: Given an ‘origin’ and ‘destination’ and a departure time, order the possible journeys by the shortest total duration time.
+    <% } else { %>
+        Q2: Given an ‘origin’ and ‘destination’ and a departure time, order the possible journeys by the cheapest total price.
+    <% } %>
+</p>
+
+<% if (journeys.length > 0) { %>
+
+    <% for (let [index, journey] of journeys.entries()) { %>
+
+        <p><strong>Route</strong>: <%=index + 1 %></p>
+        <p><strong>Cheapest Price:</strong>: <%=journey.priceTotal %></p>
+        <p><strong>Duration Hours</strong>: <%=journey.durationTotal %></p>
+        <p><strong>Exchanges</strong>: <%=journey.routesTotal > 1 ? journey.routesTotal - 1 : "Direct Flight" %></p>
+        <p>
+            <strong>Routes</strong>:
+            <p>
+            <% for (let [index2, route] of journey.routes.entries()) { %>
+                <strong><%=route.route_id %></strong>:
+                <% for (let [index3, flight] of route.flights.entries()) { %>
+                    <p>Provider: <%=flight.provider %> (Price: <%=flight.price %>) <%= orderBy != 'durationTotal' && index3 == 0 ? '<<< cheapest flight' : '' %> </p>
+                <% } %>
+            <% } %>
+            </p>
+        </p>
+        <hr />
+
+    <% } %>
+
+<% } else { %>
+    <p>
+        No routes found.
+    </p>
+<% } %>
+
+</body>
+</html>

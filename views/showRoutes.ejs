@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title><%= pageTitle %></title>
+</head>
+<body>
+
+<h4><%= pageTitle %></h4>
+
+<p>
+    Q1: Given an ‘origin’ and ‘destination’, order the possible journeys by the lowest number of exchanges.
+</p>
+
+<% if (journeys.length > 0) { %>
+
+    <% for (let [index, journey] of journeys.entries()) { %>
+
+        <p><strong>Route</strong>: <%=index + 1 %></p>
+        <p><strong>Duration Hours</strong>: <%=journey.durationTotal %></p>
+        <p><strong>Exchanges</strong>: <%=journey.routesTotal > 1 ? journey.routesTotal - 1 : "Direct Flight" %></p>
+        <p>
+            <strong>Routes</strong>:
+            <% for (let [index2, route] of journey.routes.entries()) { %>
+                <%=route.route_id %> <%=index2 < journey.routes.length - 1 ? "->" : "" %>
+            <% } %>
+        </p>
+        <hr />
+
+    <% } %>
+
+<% } else { %>
+    <p>
+        No routes found.
+    </p>
+<% } %>
+
+</body>
+</html>

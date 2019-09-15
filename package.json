@@ -1,0 +1,26 @@
+{
+  "name": "code-challenge-flights",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "mocha --recursive",
+    "start": "nodemon app.js"
+  },
+  "author": "Mike Wright",
+  "license": "ISC",
+  "devDependencies": {
+    "nodemon": "^1.19.0",
+    "mocha": "^6.2.0"
+  },
+  "dependencies": {
+    "aws-sdk": "^2.504.0",
+    "aws-serverless-express": "^3.3.6",
+    "body-parser": "^1.19.0",
+    "ejs": "^2.6.1",
+    "express": "^4.16.4",
+    "lodash": "^4.17.15",
+    "moment": "^2.24.0",
+    "uuid-by-string": "^2.1.5"
+  }
+}
